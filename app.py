@@ -1,11 +1,13 @@
 import streamlit as st
 import nltk
-from transformers import pipeline
-from nltk.corpus import stopwords
+from nltk.corpus import stopwards
 from nltk.tokenize import word_tokenize
 
+# Load model directly
+from transformers import AutoTokenizer, AutoModelForCausalLM
 
-chatbot = pipeline("text-generation", model="distilgpt-2")
+tokenizer = AutoTokenizer.from_pretrained("distilbert/distilgpt2")
+model = AutoModelForCausalLM.from_pretrained("distilbert/distilgpt2")
 
 def healthcare_chatbot(user_input):
     if "symptom" in user_input:
@@ -15,7 +17,7 @@ def healthcare_chatbot(user_input):
     elif "medication" in user_input:
         response = "Its important to take prescribed medicines regularly. If you have concerns, consult your doctor."
     else:
-        response = chatbot(user_input, max_length=500, num_return_sequences=1)
+        response = model(user_input, max_length=500, num_return_sequences=1)
         return response[0]['generated_text']
 
 def main():
